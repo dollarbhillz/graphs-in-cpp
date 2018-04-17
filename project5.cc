@@ -14,8 +14,6 @@ Province::Province(istream & input)
 
    input >> numTowns >> numRoads;
 
-   // _towns->resize(numTowns);
-   // _roads->resize(numRoads);
    for (int i = 0; i < numTowns; i++)
    {
      string name = "";
@@ -49,17 +47,20 @@ void Province::print1()
   cout << "The input data is: " << endl;
   for (int i = 0; i < _towns.size(); i++)
   {
-    if (i == 0)
-    {
-      cout << "\t" << getCapital()->_name << endl;
-      // for()
-    }
-    else
-    {
+    cout << "\t" << _towns[i]->getName() << endl;
 
+    for (int j = 0; j < _towns[i]->getAdjRoads().size(); j++)
+    {
+      string bridge = "";
+      if (_towns[i]->getRoad(j)->isBridge())
+      {
+        bridge = "via bridge";
+      }
+      cout << "\t\t" << _towns[i]->getRoad(j)->getAltTown(_towns[i]->getName())->getName() << " "
+            << _towns[i]->getRoad(j)->getDistance() << " mi "
+              << bridge << endl;
     }
   }
-
 }
 
 Town * Province::getCapital()
@@ -80,7 +81,6 @@ void Province::setCapital(Town * capital)
 
 Town * Province::getTown(string name)
 {
-  // Town * town;
   for(vector<Town *>::iterator it = _towns.begin(); it != _towns.end(); ++it)
   {
     Town * town = *it;
@@ -95,6 +95,8 @@ void Province::addRoad(Town * firstTown, Town * secondTown, char bridge, float d
 {
   Road * road = new Road(firstTown, secondTown, bridge, distance);
   _roads.push_back(road);
+  firstTown->addRoad(road);
+  secondTown->addRoad(road);
 }
 
 
@@ -107,6 +109,16 @@ Town::Town(string name, bool capital)
 void Town::addRoad(Road * road)
 {
   _adjRoads.push_back(road);
+}
+
+vector<Road *> Town::getAdjRoads()
+{
+  return _adjRoads;
+}
+
+Road * Town::getRoad(int index)
+{
+  return _adjRoads[index];
 }
 
 string Town::getName()
@@ -148,6 +160,18 @@ bool Road::isBridge()
 Town * Road::getTown(int index)
 {
   return _adjTowns[index];
+}
+
+Town * Road::getAltTown(string name)
+{
+  for(vector<Town *>::iterator it = _adjTowns.begin(); it != _adjTowns.end(); ++it)
+  {
+    Town * town = *it;
+    if(town->getName() != name)
+    {
+      return *it;
+    }
+  }
 }
 
 /* Check the remainder of the file for non-whitespace.

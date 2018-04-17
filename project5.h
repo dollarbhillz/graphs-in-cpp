@@ -98,6 +98,12 @@ class Town
     */
     void addRoad(Road * road);
 
+    /* Get the vector of adjacent roads */
+    vector<Road *> getAdjRoads();
+
+    /* Get the road at a certain index in the adjacent roads vector */
+    Road * getRoad(int index);
+
     /* Accessor for the name of the town */
     string getName();
 
@@ -112,7 +118,6 @@ class Town
     string _name;
     /* Vector of roads connected to this town */
     vector<Road *> _adjRoads;
-    vector<Road *>::iterator _roadIter;
 };
 
 class Road
@@ -139,6 +144,8 @@ class Road
      * * index - index of town
     */
     Town * getTown(int index);
+
+    Town * getAltTown(string name);
 
   private:
     /* Private instance variables */
