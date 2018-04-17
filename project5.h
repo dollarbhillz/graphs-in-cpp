@@ -20,7 +20,7 @@ class Province
     /* Constructor
      *
      */
-    Province();
+    Province(Town * capital);
 
     // Destructor
     ~Province();
@@ -95,9 +95,6 @@ class Town
     /* Accessor for the name of the town */
     string getName();
 
-    /* Set whether or not this is the capital of the province */
-    void setCapital();
-
     /* Check whether this is the capital */
     bool isCapital();
 
@@ -128,19 +125,9 @@ class Road
     /* Access the distance of this road */
     float getDistance();
 
-    /* Set the bridge boolean if this road is a bridge */
-    void makeBridge();
-
     /* Check if this road is a bridge */
     bool isBridge();
 
-    /* Add an adjacent town to this road
-     * Parameters:
-     * * town - The pointer to the Town to add
-     * * name - the name of the Town to add
-     * * index - where to add it in the adjacent Town vector (either 0 or 1)
-    */
-    void addTown(Town * town, string name, int index);
   private:
     /* Private instance variables */
     bool _bridge;
