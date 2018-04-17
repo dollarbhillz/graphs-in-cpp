@@ -5,6 +5,7 @@
  * Benjamin Hills & Bradley Etienne
  */
 
+#include <queue>
 #include "project5.h"
 
 Province::Province(istream & input)
@@ -22,10 +23,12 @@ Province::Province(istream & input)
      {
        addTown(name, true);
        setCapital(getTown(name));
+       getTown(name)->setIndex(0);
      }
      else
      {
        addTown(name, false);
+       getTown(name)->setIndex(i);
      }
    }
    for (int j = 0; j < numRoads; j++)
@@ -39,26 +42,57 @@ Province::Province(istream & input)
    }
 }
 
+// Destructor to be implemented
 Province::~Province()
 { }
 
 void Province::print1()
 {
-  cout << "The input data is: " << endl;
-  for (int i = 0; i < _towns.size(); i++)
+  bool * scheduled = new bool[_towns.size()];
+  for (int n = 0; n < _towns.size(); n++)
   {
-    cout << "\t" << _towns[i]->getName() << endl;
+    scheduled[n] = false;
+  }
 
-    for (int j = 0; j < _towns[i]->getAdjRoads().size(); j++)
+  queue<Town *> toVisit;
+
+  toVisit.push(getCapital());
+
+  scheduled[0] = true;
+
+  cout << "The input data is: " << endl;
+
+  while(!toVisit.empty())
+  {
+    Town * current = toVisit.front();
+    toVisit.pop();
+    cout << "\t" << current->getName() << endl;
+
+    vector<Town *> adj;
+    for (int j = 0; j < current->getAdjRoads().size(); j++)
     {
+      adj.push_back(current->getRoad(j)->getAltTown(current->getName()));
       string bridge = "";
-      if (_towns[i]->getRoad(j)->isBridge())
+      if (current->getRoad(j)->isBridge())
       {
         bridge = "via bridge";
       }
-      cout << "\t\t" << _towns[i]->getRoad(j)->getAltTown(_towns[i]->getName())->getName() << " "
-            << _towns[i]->getRoad(j)->getDistance() << " mi "
-              << bridge << endl;
+      cout << "\t\t" << current->getRoad(j)->getAltTown(current->getName())->getName() << " "
+             << current->getRoad(j)->getDistance() << " mi "
+               << bridge << endl;
+    }
+
+    // Inspired by Graph Algorithms handout
+    for (vector<Town *>::iterator iter = adj.begin();
+          iter != adj.end(); iter++)
+    {
+      Town * adjacent = *iter;
+      int head = adjacent->getIndex();
+      if (!scheduled[head])
+      {
+        toVisit.push(*iter);
+        scheduled[head] = true;
+      }
     }
   }
 }
@@ -129,6 +163,16 @@ string Town::getName()
 bool Town::isCapital()
 {
   return _capital;
+}
+
+int Town::getIndex()
+{
+  return _index;
+}
+
+void Town::setIndex(int index)
+{
+  _index = index;
 }
 
 

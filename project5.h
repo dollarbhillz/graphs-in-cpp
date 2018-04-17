@@ -110,12 +110,21 @@ class Town
     /* Check whether this is the capital */
     bool isCapital();
 
+    /* Get index of town */
+    int getIndex();
+
+    /* Set index of town */
+    void setIndex(int index);
+
   private:
     /* Is this a capital */
     bool _capital;
 
     /* Name of the town */
     string _name;
+
+    /* Index of town */
+    int _index;
     /* Vector of roads connected to this town */
     vector<Road *> _adjRoads;
 };
@@ -145,6 +154,11 @@ class Road
     */
     Town * getTown(int index);
 
+    /* When getting the town to print for this road, get the alternate town
+     * * with a different name than the current town being referenced
+     * * Parameter:
+     * * * name - the name of the town currently being referenced
+    */
     Town * getAltTown(string name);
 
   private:
