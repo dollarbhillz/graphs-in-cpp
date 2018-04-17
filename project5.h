@@ -20,7 +20,7 @@ class Province
     /* Constructor
      *
      */
-    Province(Town * capital);
+    Province(istream & input);
 
     // Destructor
     ~Province();
@@ -35,8 +35,8 @@ class Province
     */
     void input(istream & input);
 
-    /* Print the output with appropriate formatting */
-    void print();
+    /* Print the output with appropriate formatting for req 1 */
+    void print1();
 
     /* Accessor for the capital of the province */
     Town * getCapital();
@@ -54,6 +54,12 @@ class Province
     */
     void addTown(string name, bool capital);
 
+    /* Find a town in the province
+     * Parameter:
+     * * name - the name of the town
+    */
+    Town * getTown(string name);
+
     /* Add a road to the province
      * Parameters:
      * * firstTown - the first town the road connects to
@@ -61,12 +67,12 @@ class Province
      * * distance - the distance / weight of the road
      * * bridge - bool if the road is a bridge
     */
-    void addRoad(Town * firstTown, Town * secondTown, float distance, bool bridge);
+    void addRoad(Town * firstTown, Town * secondTown, char bridge, float distance);
 
   private:
     /* Vectors to store all the towns and roads */
-    vector<Town *> _towns [];
-    vector<Road *> _roads [];
+    vector<Town *> _towns;
+    vector<Road *> _roads;
 
     /* The capital of the province */
     Town * _capital;
@@ -99,14 +105,14 @@ class Town
     bool isCapital();
 
   private:
-    /* Vector of roads connected to this town */
-    vector<Road *> _adjRoads [];
-
     /* Is this a capital */
     bool _capital;
 
     /* Name of the town */
     string _name;
+    /* Vector of roads connected to this town */
+    vector<Road *> _adjRoads;
+    vector<Road *>::iterator _roadIter;
 };
 
 class Road
@@ -120,7 +126,7 @@ class Road
      * * distance - the distance / weight of this road
      * * bridge - bool if this road is a bridge
     */
-    Road(Town * firstTown, Town * secondTown, float distance, bool bridge);
+    Road(Town * firstTown, Town * secondTown, char bridge, float distance);
 
     /* Access the distance of this road */
     float getDistance();
@@ -128,10 +134,16 @@ class Road
     /* Check if this road is a bridge */
     bool isBridge();
 
+    /* Get either of the adjacent towns, first town is index 1
+     * Parameter:
+     * * index - index of town
+    */
+    Town * getTown(int index);
+
   private:
     /* Private instance variables */
-    bool _bridge;
+    char _bridge;
     float _distance;
-    vector<Town *> adjTowns [];
+    vector<Town *> _adjTowns;
 
 };
