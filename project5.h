@@ -18,13 +18,15 @@ class Province
 {
   public:
     /* Constructor
-     *
+     * RT Say what it does.  Describe the input stream and give a simple
+     * RT example.
      */
     Province(istream & input);
 
     // Destructor
     ~Province();
 
+    //RT Good, but need a comment
     Province(const Province &) = delete;
     const Province
       & operator = (const Province &) = delete;
@@ -33,13 +35,24 @@ class Province
      * Parameter:
      * * input - the input stream from istream
     */
+    //RT Wait, doesn't the constructor do this?  If this is a helper,
+    //RT make it private.
     void input(istream & input);
 
     /* Print the output with appropriate formatting for req 1 */
+    //RT Even though I know what this is, you should give it a good
+    //RT descriptive comment.  It's good practice.
+    //RT (I mean, I have code to do the printing, too, but that practice
+    //RT is also good for your learning.)
     void print1();
 
     /* Accessor for the capital of the province */
     Town * getCapital();
+
+    //RT The mutators should only be called by the constructor,
+    //RT so they should be private.
+
+    //RT Good methods!
 
     /* Mutator for setting the capital of the province
      * Parameter:
@@ -110,6 +123,7 @@ class Town
     /* Check whether this is the capital */
     bool isCapital();
 
+    //RT What is the index for?  Does it really make sense to change the index?
     /* Get index of town */
     int getIndex();
 
@@ -149,6 +163,7 @@ class Road
     bool isBridge();
 
     /* Get either of the adjacent towns, first town is index 1
+       //RT Not index 0 and 1?
      * Parameter:
      * * index - index of town
     */
