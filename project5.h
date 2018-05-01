@@ -116,15 +116,15 @@ class Town
     /* Get index of town */
     int getIndex();
 
+    /* Set index of town */
+    void setIndex(int index);
+
     /* Sort the list of adjacent roads by distance */
     void sortAdjRoads();
 
 
 
   private:
-    /* Set index of town */
-    void setIndex(int index);
-
     /* Is this a capital */
     bool _capital;
 
