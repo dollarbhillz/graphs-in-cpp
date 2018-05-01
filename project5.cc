@@ -6,6 +6,7 @@
  */
 
 #include <queue>
+#include <stack>
 #include "project5.h"
 
 Province::Province(istream & input)
@@ -94,6 +95,58 @@ void Province::print1()
         scheduled[head] = true;
       }
     }
+  }
+}
+
+void Province::print2();
+{
+  // List of distances from capital, indices are parallel to _towns list
+  vector<float> dist;
+  vector<Town *> path;
+  Town * curTown = getCapital();
+  Town * prevTown;
+  // First distance in list is capital, so 0
+  dist.push_back(0);
+  for(int i = 1; i < _towns.size(); i++)
+  {
+    curTown = _towns[i];
+    vector<Road *> curAdjRoads = curTown->getAdjRoads();
+    vector<Town *> curAdjTowns;
+    for(vector<Road *>::iterator iter = curAdjRoads.begin(); iter != curAdjRoads.end(); ++iter)
+    {
+      curAdjTowns.push_back(*iter->getAltTown());
+    }
+    for(int j = 0; j < curAdjTowns.size(); j++)
+    {
+      if(curAdjTowns[j]->isCapital())
+        dist.push_back(curAdjRoads[j]->getDistance()); // Has direct path to capital
+      else
+        dist.push_back(-1); // No direct path to capital
+    }
+  }
+
+  stack<Town *> visited;
+  for (int k = 0; k < dist.size(); k++)
+  {
+
+    if(dist[k] == -1)
+    {
+
+    }
+  }
+  // Iterate through all the vertices in the graph
+  for (int i = 0; i < _towns.size(); i++)
+  {
+    Town * curTown = _towns[i];
+    vector<Road *> curAdjRoads = curTown.getAdjRoads();
+    vector<Town *> curAdjTowns;
+    for(int k = 0; k < curAdjRoads.size(); k++)
+    {
+      curAdjTowns.push_back(curAdjRoads[k].getAltTown());
+    }
+
+    bool known = false;
+    dist.push_back(_towns[i].getRoad().getDistance());
   }
 }
 
