@@ -5,7 +5,7 @@
  * Benjamin Hills & Bradley Etienne
  */
 
-#include <queue>
+
 #include <stack>
 #include "project5.h"
 
@@ -105,54 +105,69 @@ void Province::print2()
   vector<Town *> path;
   Town * curTown = getCapital();
   Town * prevTown;
-  stack<Town *> visited;
+  // stack<Town *> visited;
+  priority_queue<MinHeapItem> toVisit;
   // First distance in list is capital, so 0
   dist.push_back(0);
+  // Add all the towns except the capital to the toVisit priority_queue
+  // // and set the distance in the dist vector to inf initially
   for(int i = 1; i < _towns.size(); i++)
   {
-    curTown = _towns[i];
-    vector<Road *> curAdjRoads = curTown->getAdjRoads();
-    vector<Town *> curAdjTowns;
-    for(vector<Road *>::iterator iter = curAdjRoads.begin(); iter != curAdjRoads.end(); ++iter)
-    {
-      Road * temp = *iter;
-      curAdjTowns.push_back(temp->getAltTown(curTown->getName()));
-    }
-    for(int j = 0; j < curAdjTowns.size(); j++)
-    {
-      if(curAdjTowns[j]->isCapital())
-      {
-        dist.push_back(curAdjRoads[j]->getDistance()); // Has direct path to capital
-        visited.push(_towns[i]);
-      }
-      else
-        dist.push_back(-1); // No direct path to capital
-    }
+    // curTown = _towns[i];
+    // vector<Road *> curAdjRoads = curTown->getAdjRoads();
+    // vector<Town *> curAdjTowns;
+    // for(int j = 0; j < curAdjRoads.size(); j++)
+    // {
+    //   Road * temp = curAdjRoads[j];
+    //   curAdjTowns.push_back(temp->getAltTown(curTown->getName()));
+    // }
+    // for(int k = 0; k < curAdjTowns.size(); k++)
+    // {
+    //   if(curAdjTowns[k]->isCapital())
+    //   {
+    //     dist.push_back(curAdjRoads[k]->getDistance()); // Has direct path to capital
+    //     toVisit.push({ curAdjRoads[k]->getDistance(), curAdjTowns[k]->getName() });
+    //     // visited.push(_towns[i]);
+    //   }
+    //   else
+    //   {
+    //     dist.push_back(FLT_MAX); // No direct path to capital
+    //     toVisit.push({ FLT_MAX, curAdjTowns[k]->getName() });
+    //   }
+    // }
+    dist.push_back(FLT_MAX);
   }
-
-
-  for (int k = 0; k < dist.size(); k++)
+  // Declare and initialize the list of adjacent roads and towns to the capital
+  vector<Road *> capAdjRoads = curTown->getAdjRoads();
+  vector<Town *> capAdjTowns;
+  for(int j = 0; j < capAdjRoads.size(); j++)
   {
-
-    if(dist[k] == -1)
-    {
-
-    }
+    capAdjTowns.push_back(capAdjRoads[j]->getAltTown(getCapital()->getName()));
   }
-  // // Iterate through all the vertices in the graph
-  // for (int i = 0; i < _towns.size(); i++)
-  // {
-  //   Town * curTown = _towns[i];
-  //   vector<Road *> curAdjRoads = curTown->getAdjRoads();
-  //   vector<Town *> curAdjTowns;
-  //   for(int k = 0; k < curAdjRoads.size(); k++)
-  //   {
-  //     curAdjTowns.push_back(curAdjRoads[k]->getAltTown());
-  //   }
-  //
-  //   bool known = false;
-  //   dist.push_back(_towns[i].getRoad().getDistance());
-  // }
+  // Update dist with distance to adjacent towns and push them to toVisit
+  for(int k = 0; k < capAdjTowns.size(); k++)
+  {
+    dist[capAdjTowns[k]->getIndex()] = capAdjRoads[k]->getDistance();
+    toVisit.push({ capAdjRoads[k]->getDistance(), capAdjTowns[k]->getName() });
+  }
+
+for(int i = 0; i < _towns.size(); i++)
+{
+  if(dist[i] == FLT_MAX)
+  {
+    toVisit.push({ FLT_MAX, _towns[i]->getName() });
+  }
+}
+
+
+  // Traverse the towns not yet visited, starting with the closest ones
+  while (!toVisit.empty())
+  {
+    curTown = getTown(toVisit.top()._name);
+    toVisit.pop();
+
+
+  }
 }
 
 Town * Province::getCapital()

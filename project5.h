@@ -9,6 +9,9 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <queue>
+#include <cfloat>
+#include <functional>
 using namespace std;
 
 class Town;
@@ -176,4 +179,15 @@ class Road
     float _distance;
     vector<Town *> _adjTowns;
 
+};
+
+// Defines an item in a minHeap. Will be stored in a priority_queue
+struct MinHeapItem
+{
+  float _dist;
+  string _name;
+  bool operator < (const MinHeapItem & item) const
+  {
+    return _dist < item._dist;
+  }
 };
