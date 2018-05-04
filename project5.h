@@ -105,6 +105,9 @@ class Province
     /* Returns the vector of towns in the province */
     vector<Town*> getTowns();
 
+    /* Returns the vector of roads in the province */
+    vector<Road*> getRoads();
+
   private:
 
     /* Vectors to store all the towns and roads */

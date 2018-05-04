@@ -195,6 +195,71 @@ void Province::print2()
    }
  }
 
+
+ // Helper function for print3()
+ template <typename Town>
+ void unionFind(map<Town, Town>& mainMap, Town a, Town b)
+ {
+   Town aRoot = a;
+   Town bRoot = b;
+
+   while (aRoot != mainMap[aRoot])
+   {
+     aRoot = mainMap[aRoot];
+   }
+
+   while (bRoot != mainMap[bRoot])
+   {
+     bRoot = mainMap[bRoot];
+   }
+
+   if (aRoot != bRoot)
+   {
+     mainMap[bRoot] = aRoot;
+   }
+ }
+
+ void Province::print3()
+ {
+   // need to construct a proper priority queue     priority_queue<   > toVisit;
+   map<Town*, Town*> map;
+   vector<Road*> tree;
+
+   vector<Town*> towns = getTowns();
+   vector<Town*>::iterator i;
+
+   for (i = towns.begin(); i != towns.end(); i++)
+   {
+     map[*i] = *i;
+   }
+
+   vector<Road*> roads = getRoads();
+   vector<Road*>::iterator j;
+
+   for (j = roads.begin(); j != roads.end(); j++)
+   {
+     // toVisit.push(*j);
+   }
+
+   while (tree.size() < towns.size()-1)
+   {
+     // Road* road = toVisit.top();
+     // toVisit.pop()
+
+     /* Stuck */
+   }
+ }
+
+
+ void Province::print4()
+ {
+   set<Town*> foundTowns;
+   queue<Town*> BFSq;
+   vector<Town*> BFSv;
+
+  //  foundTowns.insert()
+ }
+
 Town * Province::getCapital()
 {
   return _capital;
@@ -236,6 +301,10 @@ vector<Town*> Province::getTowns()
   return _towns;
 }
 
+vector<Road*> Province::getRoads()
+{
+  return _roads;
+}
 
 Town::Town(string name, bool capital)
 {
