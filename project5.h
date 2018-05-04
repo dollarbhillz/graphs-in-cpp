@@ -18,8 +18,8 @@ class Province
 {
   public:
     /* Constructor
-     * RT Say what it does.  Describe the input stream and give a simple
-     * RT example.
+     * Read and store the input from istream
+     * Parameter: input - the input stream from istream
      */
     Province(istream & input);
 
@@ -31,46 +31,61 @@ class Province
     const Province
       & operator = (const Province &) = delete;
 
-    /* Read and store the input from istream
-     * Parameter:
-     * * input - the input stream from istream
-    */
-    //RT Wait, doesn't the constructor do this?  If this is a helper,
-    //RT make it private.
-    void input(istream & input);
-
-    /* Print the output with appropriate formatting for req 1 */
-    //RT Even though I know what this is, you should give it a good
-    //RT descriptive comment.  It's good practice.
-    //RT (I mean, I have code to do the printing, too, but that practice
-    //RT is also good for your learning.)
+    /* Print the output with appropriate formatting for req 1
+     * Start with the provincial capital (the first town in the list),
+     * and follows a breadth-first order in listing the remaining towns.
+     */
     void print1();
+
+    /* Print the output with appropriate formatting for req 2
+     * Determine the shortest route from the provincial capital to each of the
+     * other towns, and print out both the route and the distance. using Dijkstra's
+     * Algorithm, we generate all the paths from the capital in increasing order
+     * of length.
+     */
+    void print2();
+
+
+    /* The national government would like to achieve the goal of having a high
+     * quality route connecting every pair of towns in the province (but not
+     * necessarily directly), while minimizing the miles of road they rebuild.
+     * This method prints out the roads that should be upgraded to achieve this
+     * goal. */
+    void print3();
+
+    /* Performs a connected components analysis, ignoring the bridge edges.)
+     * Prints out the conected components pf the province once all the bridges
+     * have been removed. */
+    void print4();
+
+    /* Analyze the data to determine which town(s) in each province - if any -
+     * would result in the province becoming disconnected if they were
+     * obliterated. Prints our the cities that are articulation points, or
+     * "None" if there are none.*/
+    void print5();
 
     /* Accessor for the capital of the province */
     Town * getCapital();
-
-    //RT The mutators should only be called by the constructor,
-    //RT so they should be private.
 
     //RT Good methods!
 
     /* Mutator for setting the capital of the province
      * Parameter:
      * * capital - the town that is the capital of this province
-    */
+     */
     void setCapital(Town * capital);
 
     /* Add a town to the province
      * Parameters:
      * * name - name of Town to add
      * * capital - bool if the town is the capital of the province
-    */
+     */
     void addTown(string name, bool capital);
 
     /* Find a town in the province
      * Parameter:
      * * name - the name of the town
-    */
+     */
     Town * getTown(string name);
 
     /* Add a road to the province
