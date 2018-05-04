@@ -1,4 +1,4 @@
-/* This is also the most beautiful header comment you will ever encounter in all
+/* This the most beautiful implementation comment you will ever encounter in all
  * your experience in the workplace
  *
  * project5.cc
@@ -43,10 +43,23 @@ Province::Province(istream & input)
    }
 }
 
-// Destructor to be implemented
-Province::~Province()
-{ }
 
+Province::~Province()
+{
+   vector<Town*>::iterator i;
+   for (i = _towns.begin(); i != _towns.end(); i++)
+   {
+     delete *i;
+   }
+
+   vector<Road*>::iterator j;
+   for (j = _roads.begin(); j != _roads.end(); j++)
+   {
+     delete *j;
+   }
+}
+
+/* Implementation of requirement 1 */
 void Province::print1()
 {
   bool * scheduled = new bool[_towns.size()];
@@ -98,77 +111,154 @@ void Province::print1()
   }
 }
 
+/* Implementation of requirement 2 */
 void Province::print2()
 {
-  // List of distances from capital, indices are parallel to _towns list
-  vector<float> dist;
-  vector<Town *> path;
-  Town * curTown = getCapital();
-  Town * prevTown;
-  // stack<Town *> visited;
-  priority_queue<MinHeapItem> toVisit;
-  // First distance in list is capital, so 0
-  dist.push_back(0);
-  // Add all the towns except the capital to the toVisit priority_queue
-  // // and set the distance in the dist vector to inf initially
-  for(int i = 1; i < _towns.size(); i++)
-  {
-    // curTown = _towns[i];
-    // vector<Road *> curAdjRoads = curTown->getAdjRoads();
-    // vector<Town *> curAdjTowns;
-    // for(int j = 0; j < curAdjRoads.size(); j++)
-    // {
-    //   Road * temp = curAdjRoads[j];
-    //   curAdjTowns.push_back(temp->getAltTown(curTown->getName()));
-    // }
-    // for(int k = 0; k < curAdjTowns.size(); k++)
-    // {
-    //   if(curAdjTowns[k]->isCapital())
-    //   {
-    //     dist.push_back(curAdjRoads[k]->getDistance()); // Has direct path to capital
-    //     toVisit.push({ curAdjRoads[k]->getDistance(), curAdjTowns[k]->getName() });
-    //     // visited.push(_towns[i]);
-    //   }
-    //   else
-    //   {
-    //     dist.push_back(FLT_MAX); // No direct path to capital
-    //     toVisit.push({ FLT_MAX, curAdjTowns[k]->getName() });
-    //   }
-    // }
-    dist.push_back(FLT_MAX);
-  }
-  // Declare and initialize the list of adjacent roads and towns to the capital
-  vector<Road *> capAdjRoads = curTown->getAdjRoads();
-  vector<Town *> capAdjTowns;
-  for(int j = 0; j < capAdjRoads.size(); j++)
-  {
-    capAdjTowns.push_back(capAdjRoads[j]->getAltTown(getCapital()->getName()));
-  }
-  // Update dist with distance to adjacent towns and push them to toVisit
-  for(int k = 0; k < capAdjTowns.size(); k++)
-  {
-    dist[capAdjTowns[k]->getIndex()] = capAdjRoads[k]->getDistance();
-    toVisit.push({ capAdjRoads[k]->getDistance(), capAdjTowns[k]->getName() });
-  }
 
-for(int i = 0; i < _towns.size(); i++)
-{
-  if(dist[i] == FLT_MAX)
-  {
-    toVisit.push({ FLT_MAX, _towns[i]->getName() });
-  }
-}
+  cout << "The shortest routes from " << getCapital()->getName() << " are:" << endl;
+  map<Town*, float> dist;
+  set<Town*> townSet;
+  map<Town*, Town*> prevTown;
+
+  vector<Town*> path = getTowns();
+  vector<Town*>::iterator i = path.begin();
+
+  dist[*i] = 0;
+  i++;
 
 
-  // Traverse the towns not yet visited, starting with the closest ones
-  while (!toVisit.empty())
+  for( ; i != path.end(); i++)
   {
-    curTown = getTown(toVisit.top()._name);
-    toVisit.pop();
-
-
+    dist[*i] = FLT_MAX;
   }
-}
+
+  for (i = path.begin(); i != path.end(); i++)
+  {
+    prevTown[*i] = 0;
+  }
+
+  while (townSet.size() != path.size())
+  {
+    map<Town*, float>::iterator j = dist.begin();
+    float minDist = FLT_MAX;
+    Town* k;
+
+    for (j = dist.begin(); j != dist.end(); j++)
+      if (townSet.count(j->first) == 0 && j->second < minDist)
+      {
+        k = j->first;
+        minDist = j->second;
+      }
+
+    townSet.insert(k);
+
+    vector<Road*> adjacentRoads = k->getAdjRoads();
+    vector<Road*>::iterator m;
+
+      for (m = adjacentRoads.begin(); m != adjacentRoads.end(); m++)
+        if (townSet.count((*m)-> getAltTown(k->getName())) == 0)
+        {
+          Road* n = *m;
+          Town* o = n->getAltTown(k->getName());
+          if (dist[k] + n->getDistance() < dist[o])
+          {
+            dist[o] = dist[k] + n->getDistance();
+            prevTown[o] = k;
+          }
+        }
+   }
+
+   i = ++path.begin();
+   for (; i != path.end(); i++)
+   {
+     Town* curTown = *i;
+     cout << "\t" << "The shortest route from " << path.front()->getName()
+             << " to " << curTown->getName() << " is "
+             << dist[curTown] << " mi:" << endl << endl;
+
+     stack<Town*> towns;
+     Town* temp = curTown;
+
+     while (temp != 0)
+     {
+       towns.push(temp);
+       temp = prevTown[temp];
+     }
+
+     while (!towns.empty())
+     {
+       cout << "\t\t" << towns.top()->getName() << endl;
+       towns.pop();
+     }
+
+     cout << endl;
+   }
+ }
+
+
+ // Helper function for print3()
+ template <typename Town>
+ void unionFind(map<Town, Town>& mainMap, Town a, Town b)
+ {
+   Town aRoot = a;
+   Town bRoot = b;
+
+   while (aRoot != mainMap[aRoot])
+   {
+     aRoot = mainMap[aRoot];
+   }
+
+   while (bRoot != mainMap[bRoot])
+   {
+     bRoot = mainMap[bRoot];
+   }
+
+   if (aRoot != bRoot)
+   {
+     mainMap[bRoot] = aRoot;
+   }
+ }
+
+ void Province::print3()
+ {
+   // need to construct a proper priority queue     priority_queue<   > toVisit;
+   map<Town*, Town*> map;
+   vector<Road*> tree;
+
+   vector<Town*> towns = getTowns();
+   vector<Town*>::iterator i;
+
+   for (i = towns.begin(); i != towns.end(); i++)
+   {
+     map[*i] = *i;
+   }
+
+   vector<Road*> roads = getRoads();
+   vector<Road*>::iterator j;
+
+   for (j = roads.begin(); j != roads.end(); j++)
+   {
+     // toVisit.push(*j);
+   }
+
+   while (tree.size() < towns.size()-1)
+   {
+     // Road* road = toVisit.top();
+     // toVisit.pop()
+
+     /* Stuck */
+   }
+ }
+
+
+ void Province::print4()
+ {
+   set<Town*> foundTowns;
+   queue<Town*> BFSq;
+   vector<Town*> BFSv;
+
+  //  foundTowns.insert()
+ }
 
 Town * Province::getCapital()
 {
@@ -206,6 +296,15 @@ void Province::addRoad(Town * firstTown, Town * secondTown, char bridge, float d
   secondTown->addRoad(road);
 }
 
+vector<Town*> Province::getTowns()
+{
+  return _towns;
+}
+
+vector<Road*> Province::getRoads()
+{
+  return _roads;
+}
 
 Town::Town(string name, bool capital)
 {
@@ -320,5 +419,7 @@ int main()
   {
     Province province(cin);
     province.print1();
+    cout << endl << endl;
+    province.print2();
   }
 }
