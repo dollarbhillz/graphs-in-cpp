@@ -9,6 +9,9 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <queue>
+#include <cfloat>
+#include <functional>
 using namespace std;
 
 class Town;
@@ -18,47 +21,29 @@ class Province
 {
   public:
     /* Constructor
-     * RT Say what it does.  Describe the input stream and give a simple
-     * RT example.
-     */
+     * Read and store the input from istream and build the province accordingly
+     * Parameter:
+     * * input - the input stream from istream
+    */
     Province(istream & input);
 
     // Destructor
     ~Province();
 
-    //RT Good, but need a comment
     Province(const Province &) = delete;
     const Province
       & operator = (const Province &) = delete;
 
-    /* Read and store the input from istream
-     * Parameter:
-     * * input - the input stream from istream
-    */
-    //RT Wait, doesn't the constructor do this?  If this is a helper,
-    //RT make it private.
-    void input(istream & input);
-
     /* Print the output with appropriate formatting for req 1 */
-    //RT Even though I know what this is, you should give it a good
-    //RT descriptive comment.  It's good practice.
-    //RT (I mean, I have code to do the printing, too, but that practice
-    //RT is also good for your learning.)
     void print1();
+
+    /* Print the output with appropriate formatting for req 2 */
+    void print2();
 
     /* Accessor for the capital of the province */
     Town * getCapital();
 
-    //RT The mutators should only be called by the constructor,
-    //RT so they should be private.
-
     //RT Good methods!
-
-    /* Mutator for setting the capital of the province
-     * Parameter:
-     * * capital - the town that is the capital of this province
-    */
-    void setCapital(Town * capital);
 
     /* Add a town to the province
      * Parameters:
@@ -83,6 +68,13 @@ class Province
     void addRoad(Town * firstTown, Town * secondTown, char bridge, float distance);
 
   private:
+
+    /* Mutator for setting the capital of the province
+     * Parameter:
+     * * capital - the town that is the capital of this province
+    */
+    void setCapital(Town * capital);
+
     /* Vectors to store all the towns and roads */
     vector<Town *> _towns;
     vector<Road *> _roads;
@@ -129,6 +121,11 @@ class Town
 
     /* Set index of town */
     void setIndex(int index);
+
+    /* Sort the list of adjacent roads by distance */
+    void sortAdjRoads();
+
+
 
   private:
     /* Is this a capital */
@@ -182,4 +179,15 @@ class Road
     float _distance;
     vector<Town *> _adjTowns;
 
+};
+
+// Defines an item in a minHeap. Will be stored in a priority_queue
+struct MinHeapItem
+{
+  float _dist;
+  string _name;
+  bool operator < (const MinHeapItem & item) const
+  {
+    return _dist < item._dist;
+  }
 };
