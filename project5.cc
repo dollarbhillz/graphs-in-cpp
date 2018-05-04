@@ -250,14 +250,78 @@ void Province::print2()
    }
  }
 
-
- void Province::print4()
+ vector<Town*> Province::BreadthFirstSearch(Town* start, bool bridges)
  {
    set<Town*> foundTowns;
    queue<Town*> BFSq;
    vector<Town*> BFSv;
 
-  //  foundTowns.insert()
+   foundTowns.insert(start);
+   BFSq.push(start);
+
+   while (!BFSq.empty())
+   {
+     Town* curTown = BFSq.front();
+     BFSq.pop();
+
+     BFSv.push_back(curTown);
+
+     vector<Road*> roads = curTown->getAdjRoads();
+     vector<Road*>::iterator i;
+
+     for (i = roads.begin(); i != roads.end(); i++)
+     {
+       Road* road = *i;
+
+       if (!(bridges && road->isBridge()))
+       {
+         Town* altTown = road->getAltTown(curTown->getName());
+
+         if (foundTowns.count(altTown) == 0)
+         {
+           BFSq.push(altTown);
+           foundTowns.insert(altTown);
+         }
+       }
+     }
+   }
+   return BFSv;
+ }
+
+
+ void Province::print4()
+ {
+   set<Town*> done;
+   vector<Town*> towns = getTowns();
+
+   while (done.size() != towns.size())
+   {
+     vector<Town*>::iterator i;
+     Town* curTown = NULL;
+
+     for (i = towns.begin(); i != towns.end(); i++)
+     {
+       if (done.count(*i) == 0)
+       {
+         curTown = *i;
+       }
+
+     if (curTown != NULL)
+     {
+       vector<Town*> BFSv = BreadthFirstSearch(curTown, true);
+
+       cout << "\t" << "If all bridges fail, the following towns would form"
+                       " an isolated group:" << endl << endl;
+
+       for (i = BFSv.begin(); i != BFSv.end(); i++)
+       {
+         cout << "\t\t" << (*i)->getName() << endl;
+         done.insert(*i);
+       }
+       cout << endl;
+     }
+     }
+   }
  }
 
 Town * Province::getCapital()
@@ -421,5 +485,7 @@ int main()
     province.print1();
     cout << endl << endl;
     province.print2();
+    cout << endl << endl;
+    province.print4();
   }
 }
