@@ -108,6 +108,13 @@ class Province
     /* Returns the vector of roads in the province */
     vector<Road*> getRoads();
 
+    /* Returns a vector of Towns in BFS order
+     * * start - The starting point on the graph for the BFS traversal
+     * * bridge - A bool for whether or not bridges should be treated as edges
+                  in the BFS traversal
+     */
+    vector<Town*> BreadthFirstSearch(Town* start, bool bridges);
+
   private:
 
     /* Vectors to store all the towns and roads */
