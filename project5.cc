@@ -1,4 +1,4 @@
-/* This is also the most beautiful header comment you will ever encounter in all
+/* This the most beautiful implementation comment you will ever encounter in all
  * your experience in the workplace
  *
  * project5.cc
@@ -43,10 +43,23 @@ Province::Province(istream & input)
    }
 }
 
-// Destructor to be implemented
-Province::~Province()
-{ }
 
+Province::~Province()
+{
+   vector<Town*>::iterator i;
+   for (i = _towns.begin(); i != _towns.end(); i++)
+   {
+     delete *i;
+   }
+
+   vector<Road*>::iterator j;
+   for (j = _roads.begin(); j != _roads.end(); j++)
+   {
+     delete *j;
+   }
+}
+
+/* Implementation of requirement 1 */
 void Province::print1()
 {
   bool * scheduled = new bool[_towns.size()];
@@ -98,9 +111,11 @@ void Province::print1()
   }
 }
 
+/* Implementation of requirement 2 */
 void Province::print2()
 {
-  // List of distances from capital, indices are parallel to _towns list
+
+  cout << "The shortest routes from " << getCapital()->getName() << " are:" << endl;
   map<Town*, float> dist;
   set<Town*> townSet;
   map<Town*, Town*> prevTown;
@@ -148,6 +163,7 @@ void Province::print2()
           if (dist[k] + n->getDistance() < dist[o])
           {
             dist[o] = dist[k] + n->getDistance();
+            prevTown[o] = k;
           }
         }
    }
@@ -178,7 +194,6 @@ void Province::print2()
      cout << endl;
    }
  }
-
 
 Town * Province::getCapital()
 {
@@ -335,6 +350,7 @@ int main()
   {
     Province province(cin);
     province.print1();
+    cout << endl << endl;
     province.print2();
   }
 }

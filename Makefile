@@ -11,4 +11,4 @@ project5: project5.o
 	g++ -o $@ $^
 
 test: project5
-	./project5 < test2.in
+	./project5 < test.in

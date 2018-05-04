@@ -4,16 +4,17 @@
  * Benjamin Hills & Bradley Etienne
  */
 
-
+#include <functional>
 #include <iostream>
 #include <string>
+#include <cfloat>
 #include <vector>
+#include <queue>
+#include <list>
 #include <map>
 #include <set>
-#include <list>
-#include <queue>
-#include <cfloat>
-#include <functional>
+
+
 using namespace std;
 
 class Town;
@@ -77,7 +78,7 @@ class Province
      * Parameter:
      * * capital - the town that is the capital of this province
      */
-  //  void setCapital(Town * capital);
+    void setCapital(Town * capital);
 
     /* Add a town to the province
      * Parameters:
@@ -105,12 +106,6 @@ class Province
     vector<Town*> getTowns();
 
   private:
-
-    /* Mutator for setting the capital of the province
-     * Parameter:
-     * * capital - the town that is the capital of this province
-    */
-    void setCapital(Town * capital);
 
     /* Vectors to store all the towns and roads */
     vector<Town *> _towns;
