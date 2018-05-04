@@ -8,6 +8,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
+#include <set>
 #include <list>
 #include <queue>
 #include <cfloat>
@@ -70,12 +72,12 @@ class Province
     Town * getCapital();
 
     //RT Good methods!
-  
+
     /* Mutator for setting the capital of the province
      * Parameter:
      * * capital - the town that is the capital of this province
      */
-    void setCapital(Town * capital);
+  //  void setCapital(Town * capital);
 
     /* Add a town to the province
      * Parameters:
@@ -98,6 +100,9 @@ class Province
      * * bridge - bool if the road is a bridge
     */
     void addRoad(Town * firstTown, Town * secondTown, char bridge, float distance);
+
+    /* Returns the vector of towns in the province */
+    vector<Town*> getTowns();
 
   private:
 
