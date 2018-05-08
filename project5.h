@@ -223,13 +223,11 @@ class Road
 
 };
 
-// Defines an item in a minHeap. Will be stored in a priority_queue
-struct MinHeapItem
+// Comparator for road distance (aka edge weights) for priority_queue in requirement 3
+struct DistanceComparator
 {
-  float _dist;
-  string _name;
-  bool operator < (const MinHeapItem & item) const
+  bool operator () (const Road & leftRoad, const Road & rightRoad) const
   {
-    return _dist < item._dist;
+    return leftRoad->getDistance() > rightRoad->getDistance();
   }
 };
