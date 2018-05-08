@@ -4,16 +4,14 @@
  * Benjamin Hills & Bradley Etienne
  */
 
-#include <functional>
 #include <iostream>
 #include <string>
 #include <cfloat>
 #include <vector>
+#include <stack>
 #include <queue>
-#include <list>
 #include <map>
 #include <set>
-
 
 using namespace std;
 
@@ -55,19 +53,15 @@ class Province
      * quality route connecting every pair of towns in the province (but not
      * necessarily directly), while minimizing the miles of road they rebuild.
      * This method prints out the roads that should be upgraded to achieve this
-     * goal. */
+     * goal. Utilizes Kruskal's Algorithm.
+     */
     void print3();
 
     /* Performs a connected components analysis, ignoring the bridge edges.)
      * Prints out the conected components pf the province once all the bridges
-     * have been removed. */
+     * have been removed.
+     */
     void print4();
-
-    /* Analyze the data to determine which town(s) in each province - if any -
-     * would result in the province becoming disconnected if they were
-     * obliterated. Prints our the cities that are articulation points, or
-     * "None" if there are none.*/
-    void print5();
 
     /* Accessor for the capital of the province */
     Town * getCapital();
