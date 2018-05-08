@@ -294,33 +294,33 @@ void Province::print2()
    set<Town*> done;
    vector<Town*> towns = getTowns();
 
+   cout << "Connected components in event of a major storm are:" << endl;
+
    while (done.size() != towns.size())
    {
      vector<Town*>::iterator i;
-     Town* curTown = NULL;
+     Town* curTown;
 
      for (i = towns.begin(); i != towns.end(); i++)
      {
        if (done.count(*i) == 0)
        {
          curTown = *i;
+         break;
        }
+     }
+     vector<Town*> BFSv = BreadthFirstSearch(curTown, true);
 
-     if (curTown != NULL)
+     cout << "\t" << "If all bridges fail, the following towns would form"
+                     " an isolated group:" << endl << endl;
+
+     for (int i = 0; i < BFSv.size(); i++)
      {
-       vector<Town*> BFSv = BreadthFirstSearch(curTown, true);
-
-       cout << "\t" << "If all bridges fail, the following towns would form"
-                       " an isolated group:" << endl << endl;
-
-       for (i = BFSv.begin(); i != BFSv.end(); i++)
-       {
-         cout << "\t\t" << (*i)->getName() << endl;
-         done.insert(*i);
-       }
-       cout << endl;
+       Town* here = BFSv[i];
+       cout << "\t\t" << here->getName() << endl;
+       done.insert(here);
      }
-     }
+     cout << endl;
    }
  }
 
