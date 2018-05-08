@@ -36,4 +36,4 @@ BTreeTest_instructor
 *~
 
 project5
-*.stackdump
+*.exe.stackdump
