@@ -5,8 +5,6 @@
  * Benjamin Hills & Bradley Etienne
  */
 
-
-#include <stack>
 #include "project5.h"
 
 Province::Province(istream & input)
@@ -111,7 +109,9 @@ void Province::print1()
   }
 }
 
-/* Implementation of requirement 2 */
+/* Implementation of requirement 2
+ * Help recieved from Sam
+ * */
 void Province::print2()
 {
 
@@ -196,7 +196,7 @@ void Province::print2()
  }
 
 
- // Helper function for print3()
+ /* Helper function for print3() */
  template <typename Town>
  int unionFind(map<Town, Town>& mainMap, Town a, Town b)
  {
@@ -227,6 +227,9 @@ void Province::print2()
    }
  }
 
+ /* Implementation of requirement 3
+  * Help recieved from Sam
+  * */
  void Province::print3()
  {
    cout << "The road upgrading goal can be achieved at minimal cost by upgrading:" << endl;
@@ -271,6 +274,7 @@ void Province::print2()
 
  }
 
+
  vector<Town*> Province::BreadthFirstSearch(Town* start, bool bridges)
  {
    set<Town*> foundTowns;
@@ -309,7 +313,9 @@ void Province::print2()
    return BFSv;
  }
 
-
+ /* Implementation of requirement 4
+  * Help recieved from Sam
+  * */
  void Province::print4()
  {
    set<Town*> done;
