@@ -226,8 +226,8 @@ class Road
 // Comparator for road distance (aka edge weights) for priority_queue in requirement 3
 struct DistanceComparator
 {
-  bool operator () (const Road & leftRoad, const Road & rightRoad) const
+  bool operator () (Road * leftRoad, Road * rightRoad)
   {
-    return leftRoad->getDistance() > rightRoad->getDistance();
+    return leftRoad -> getDistance() > rightRoad -> getDistance();
   }
 };

@@ -198,7 +198,7 @@ void Province::print2()
 
  // Helper function for print3()
  template <typename Town>
- void unionFind(map<Town, Town>& mainMap, Town a, Town b)
+ int unionFind(map<Town, Town>& mainMap, Town a, Town b)
  {
    Town aRoot = a;
    Town bRoot = b;
@@ -217,37 +217,58 @@ void Province::print2()
    {
      mainMap[bRoot] = aRoot;
    }
+   if (aRoot != bRoot)
+   {
+     return 0;
+   }
+   else
+   {
+     return 1;
+   }
  }
 
  void Province::print3()
  {
-   // need to construct a proper priority queue     priority_queue<   > toVisit;
+   cout << "The road upgrading goal can be achieved at minimal cost by upgrading:" << endl;
+   priority_queue<Road *, vector<Road *>, DistanceComparator> pq;
    map<Town*, Town*> map;
    vector<Road*> tree;
 
    vector<Town*> towns = getTowns();
-   vector<Town*>::iterator i;
+   vector<Town*>::iterator freakedIt;
 
-   for (i = towns.begin(); i != towns.end(); i++)
+   for (freakedIt = towns.begin(); freakedIt != towns.end(); freakedIt++)
    {
-     map[*i] = *i;
+     map[*freakedIt] = *freakedIt;
    }
 
-   vector<Road*> roads = getRoads();
-   vector<Road*>::iterator j;
+   vector<Road *> roads = getRoads();
+   vector<Road *>::iterator j;
 
    for (j = roads.begin(); j != roads.end(); j++)
    {
-     // toVisit.push(*j);
+      pq.push(*j);
    }
 
    while (tree.size() < towns.size()-1)
    {
-     // Road* road = toVisit.top();
-     // toVisit.pop()
+      Road* road = pq.top();
+      pq.pop();
 
-     /* Stuck */
+      Town * t = road -> getTown(0);
+      Town * u = road -> getTown(1);
+
+      if (unionFind(map, t, u) == 0)
+        tree.push_back(road);
    }
+
+   for (int n = 0; n < tree.size(); n++)
+   {
+     cout << "\t" << tree[n] -> getTown(0) -> getName() << " to " <<
+          tree[n] -> getTown(1) -> getName() << endl;
+   }
+
+
  }
 
  vector<Town*> Province::BreadthFirstSearch(Town* start, bool bridges)
@@ -482,9 +503,11 @@ int main()
   while (!eof(cin))
   {
     Province province(cin);
-    province.print1();
-    cout << endl << endl;
+    province.print1();       // See Dr. Tuck? Don't these function names make it
+    cout << endl << endl;    // // look so organized? It's like eye candy.
     province.print2();
+    cout << endl << endl;
+    province.print3();
     cout << endl << endl;
     province.print4();
   }
